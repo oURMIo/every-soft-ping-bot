@@ -65,6 +65,20 @@ jobs:
     name: Startup check
     needs: build
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: cidb
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+        options: >-
+          --health-cmd "pg_isready -U ci -d cidb"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
 
@@ -100,8 +114,8 @@ jobs:
           exit 1
         env:
           BOT_TOKEN: fake-token-for-ci
-          QUARKUS_DATASOURCE_DB_KIND: h2
-          QUARKUS_DATASOURCE_JDBC_URL: "jdbc:h2:mem:cidb;DB_CLOSE_DELAY=-1"
-          QUARKUS_DATASOURCE_USERNAME: sa
-          QUARKUS_DATASOURCE_PASSWORD: ""
-          QUARKUS_HIBERNATE_ORM_SCHEMA_MANAGEMENT_STRATEGY: update
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: cidb
+          DB_USER: ci
+          DB_PASSWORD: ci
