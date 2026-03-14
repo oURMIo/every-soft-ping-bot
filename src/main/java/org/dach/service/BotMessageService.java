@@ -19,7 +19,7 @@ public class BotMessageService {
     private static final Logger logger = LoggerFactory.getLogger(BotMessageService.class);
 
     private static final String HELP_TEXT = """
-            <b>E-Soft Ping Bot</b> — bot for quickly notifying chat participants.
+            <b>Every Soft Ping Bot</b> — bot for quickly notifying chat participants.
 
             <b>How to use:</b>
             <code>@%s ping</code> — mention all chat participants
@@ -29,10 +29,10 @@ public class BotMessageService {
             The bot automatically remembers participants who post in the chat.""";
 
     private static final String ABOUT_TEXT = """
-            <b>E-Soft Ping Bot</b>
+            <b>Every Soft Ping Bot</b>
 
             Developer: @dmitrychis
-            GitHub: TODO
+            GitHub: <a href="https://github.com/oURMIo/every-soft-ping-bot">link</a>
             Business Card: <a href="https://dmitrych.ddns.net/">link</a>""";
 
     private final ChatMemberService chatMemberService;
