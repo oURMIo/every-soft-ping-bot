@@ -100,18 +100,16 @@ jobs:
           java -jar build/quarkus-app/quarkus-run.jar &
           APP_PID=$!
 
-          for i in $(seq 1 30); do
-            if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/hello | grep -q "200"; then
-              echo "Application started successfully"
-              kill $APP_PID
-              exit 0
-            fi
-            sleep 2
-          done
+          sleep 15
 
-          echo "Application failed to start within 60 seconds"
-          kill $APP_PID 2>/dev/null
-          exit 1
+          if kill -0 $APP_PID 2>/dev/null; then
+            echo "Application started successfully (PID $APP_PID is running)"
+            kill $APP_PID
+            exit 0
+          else
+            echo "Application crashed during startup"
+            exit 1
+          fi
         env:
           BOT_TOKEN: fake-token-for-ci
           DB_HOST: localhost

@@ -14,13 +14,11 @@ val quarkusPlatformVersion: String by project
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-arc")
-    implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("com.github.pengrad:java-telegram-bot-api:9.2.1")
     testImplementation("io.quarkus:quarkus-junit")
     testImplementation("io.quarkus:quarkus-jdbc-h2")
-    testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.mockito:mockito-core:5.15.2")
 }
 

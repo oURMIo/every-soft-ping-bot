@@ -27,6 +27,8 @@ public class PingService {
 
     private final ChatMemberService chatMemberService;
     private final Map<Long, Long> lastPingTimestamp = new ConcurrentHashMap<>();
+    public static final String EMPTY_USERS_MESSAGE = "I don't know who's in the chat yet. Post something so I can remember you!";
+    public static final String UNKNOWN_CHAT_MEMBER_MESSAGE = "I don't know anyone else in this chat besides you.";
     private volatile String botUsername;
 
     public PingService(ChatMemberService chatMemberService) {
@@ -91,7 +93,8 @@ public class PingService {
         Long lastPing = lastPingTimestamp.get(chatId);
         if (lastPing != null && (now - lastPing) < RATE_LIMIT_MS) {
             long remainingSec = (RATE_LIMIT_MS - (now - lastPing)) / 1000;
-            bot.execute(new SendMessage(chatId, "Подождите " + remainingSec + " сек. перед следующим пингом."));
+            String msg = String.format("Wait %d seconds before the next ping", remainingSec);
+            bot.execute(new SendMessage(chatId, msg));
             return;
         }
         lastPingTimestamp.put(chatId, now);
@@ -100,7 +103,7 @@ public class PingService {
         logger.info("Chat '{}' has {} tracked members", chatId, members.size());
 
         if (members.isEmpty()) {
-            bot.execute(new SendMessage(chatId, "Пока не знаю участников чата. Напишите что-нибудь, чтобы я вас запомнил!"));
+            bot.execute(new SendMessage(chatId, EMPTY_USERS_MESSAGE));
             return;
         }
 
@@ -110,7 +113,7 @@ public class PingService {
             .collect(Collectors.joining(" "));
 
         if (mentions.isBlank()) {
-            bot.execute(new SendMessage(chatId, "Кроме вас никого не знаю в этом чате."));
+            bot.execute(new SendMessage(chatId, UNKNOWN_CHAT_MEMBER_MESSAGE));
             return;
         }
 
